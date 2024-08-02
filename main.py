@@ -4,43 +4,46 @@ import os
 from getpass import getpass
 from datetime import datetime
 import hashlib
+from colorama import Fore, Back, Style
+from package_info import show_package_info
 
-
-logo = """
-    )                                         
+logo = rf"""{Fore.MAGENTA}
+{Fore.RED}    )                                         
  ( /(                   *   )              )  
  )\())   (   (        ` )  /(    )      ( /(  
 ((_)\   ))\  )(    (   ( )(_))( /(  (   )\()) 
- _((_) /((_)(()\   )\ (_(_()) )(_)) )\ ((_)\  
+{Fore.YELLOW} _((_) /((_)(()\   )\ (_(_()) )(_)) )\ ((_)\  
 | \| |(_))   ((_) ((_)|_   _|((_)_ ((_)| |(_) 
-| .` |/ -_) | '_|/ _ \  | |  / _` |(_-<| / /  
-|_|\_|\___| |_|  \___/  |_|  \__,_|/__/|_\_\ """
+{Fore.MAGENTA}| .` |/ -_) | '_|/ _ \  | |  / _` |(_-<| / /{Fore.CYAN}
+|_|\_|\___| |_|  \___/  |_|  \__,_|/__/|_\_\ 
+{Style.RESET_ALL}
+"""
 
+helpMessage = f"""
+<< {Fore.CYAN} Welcome to {Fore.MAGENTA} NeroTask! {Fore.CYAN} {Style.BRIGHT} Here are the options available to you >>{Style.RESET_ALL}
 
-helpMessage = """
-<< Welcome to NeroTask! Here are the options available to you >>
+{Fore.YELLOW}!!-All this commands are not case-sensitive-!!{Style.RESET_ALL}
 
-!!-All this commands are not case-sensitive-!!
-
-> (help): displays a list of all available commands and their explanations.
-> (exit): Exit the NeroTask app.
-> (logout): logs you out of the app.
-> (list): displays all of your current ToDos. | (list--sort)-> displays all of your current ToDos sorted buy importance
-> (delete): prompts you to select a ToDo to delete. | (delete--all)-> delete all ToDos
-> (create): allows you to create a new ToDo and add it to your list.
-> (clear): clear screen buffer
-> (edit): allows you to edit your ToDo.
+> ({Fore.GREEN}help{Style.RESET_ALL}): {Style.BRIGHT}displays a list of all available commands and their explanations.{Style.RESET_ALL}
+> ({Fore.RED}exit{Style.RESET_ALL}): {Style.BRIGHT}{Fore.RED}Exit{Fore.WHITE} the NeroTask app.{Style.RESET_ALL}
+> ({Fore.RED}logout{Style.RESET_ALL}): {Style.BRIGHT}logs you out of the app.{Style.RESET_ALL}
+> ({Fore.CYAN}list{Style.RESET_ALL}): {Style.BRIGHT}displays all of your current ToDos. | ({Fore.BLUE}list--sort{Fore.WHITE})-> displays all of your current ToDos sorted buy importance{Style.RESET_ALL}
+> ({Fore.RED}delete{Style.RESET_ALL}): {Style.BRIGHT}prompts you to select a ToDo to delete. | ({Fore.RED}delete--all{Fore.WHITE})-> delete all ToDos{Style.RESET_ALL}
+> ({Fore.MAGENTA}create{Fore.WHITE}): {Style.BRIGHT}allows you to create a new ToDo and add it to your list.{Style.RESET_ALL}
+> ({Fore.CYAN}clear{Fore.WHITE}):{Style.BRIGHT} clear screen buffer{Style.RESET_ALL}
+> ({Fore.YELLOW}edit{Fore.WHITE}): {Style.BRIGHT}allows you to edit your ToDo.{Style.RESET_ALL}
 """
 
 # the user want to sing in or sign up
 
 def loginOrSignUp():
     print(logo,"\n")
-    print("Welcome to NeroTask we are more than pleased to have you!\n")
-    LogInOrSignUp = input("Log In (L) : Sign-Up (S): ")
+    print(f"{Style.BRIGHT}Welcome to {Fore.MAGENTA}NeroTask{Fore.WHITE} we are more than pleased to have you!\n{Style.RESET_ALL}")
+    x = f"Log In ({Fore.GREEN}L{Style.RESET_ALL}) : Sign-Up ({Fore.GREEN}S{Style.RESET_ALL}): "
+    LogInOrSignUp = input(x)
     
     while not (LogInOrSignUp.upper() in 'SL'):
-        LogInOrSignUp = input("Log In (L) : Sign-Up (S): ")
+        LogInOrSignUp = input(x)
     clear()
     if(LogInOrSignUp.upper() == "L"):
         logIn()
@@ -186,12 +189,12 @@ def printToDos(sort = False):
                         noChange = False
 
         for toDo in toDos:
-            print("/"*30 + "\n")
-            print("Title: " + toDo["title"] + "\n")
-            print("Task: \n" + toDo["task"] + "\n")
-            print("Date: " + toDo["date"] + "\n")
-            print("importance: " + str(toDo["importance"]) + "\n")
-            print("/"*30 + "\n")
+            print(f"{Fore.MAGENTA}/{Style.RESET_ALL}"*30 + "\n")
+            print(f"{Style.BRIGHT}Title{Style.RESET_ALL}: " + toDo["title"] + "\n")
+            print(f"{Style.BRIGHT}Task{Style.RESET_ALL}: \n" + toDo["task"] + "\n")
+            print(f"{Style.BRIGHT}Date{Style.RESET_ALL}: " + toDo["date"] + "\n")
+            print(f"{Style.BRIGHT}importance{Style.RESET_ALL}: " + str(toDo["importance"]) + "\n")
+            print(f"{Fore.MAGENTA}/{Style.RESET_ALL}"*30 + "\n")
 
 
 
@@ -238,9 +241,10 @@ def createToDo():
 # delete todos from user's todo list  
 
 def deliteToDos():
-    confirm = input("Are you sure you want to delete all your toDos? (Y/N): ")
+    x = f"{Fore.RED}Are you sure you want to delete all your toDos? (Y/N): {Style.RESET_ALL}"
+    confirm = input(x)
     while not (confirm.upper() in "YN"):
-        confirm = input("Are you sure you want to delete all your toDos? (Y/N): ")
+        confirm = input(x)
     if(confirm.upper() == "Y"):
         clients = getUsers()
         for client in clients:
@@ -260,10 +264,11 @@ def deliteToDo():
     titleToDelet = input("Enter title of task you which to delete: ")
         
     for toDo in clientToDos:
+        x = f"{Fore.RED}Are you sure you want to delete this task permanently? (Y/N): {Style.RESET_ALL}"
         if (toDo["title"] == titleToDelet):
-            confirm = input("Are you sure you want to delete this task permanently? (Y/N): ")
+            confirm = input(x)
             while not (confirm.upper() in "YN"):
-                confirm = input("Are you sure you want to delete this task permanently? (Y/N): ")
+                confirm = input(x)
             clientToDos.remove(toDo)
             if(confirm.upper() == "Y"):
                 users = getUsers()
@@ -289,13 +294,65 @@ def getUserToDos(userName):
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
+
+def editToDo():
+    clientToDos = getUserToDos(logged)
+    if len(clientToDos) == 0:
+        print("There is 0 ToDos to edit!")
+        return
+
+    titleToEdit = input("Enter the title of the task you wish to edit: ")
+    toDoToEdit = None
+
+    for toDo in clientToDos:
+        if toDo["title"] == titleToEdit:
+            toDoToEdit = toDo
+            break
+
+    if toDoToEdit is None:
+        print("There is no ToDo with this title!")
+        return
+
+    print("Leave blank to keep the current value.")
+
+    newTitle = input(f"Current Title: {toDoToEdit['title']}\nNew Title: ")
+    if newTitle.strip() != "":
+        toDoToEdit["title"] = newTitle
+
+    newTask = input(f"Current Task: {toDoToEdit['task']}\nNew Task: ")
+    if newTask.strip() != "":
+        toDoToEdit["task"] = newTask
+
+    while True:
+        try:
+            newImportance = input(f"Current Importance: {toDoToEdit['importance']}\nNew Importance [1,5]: ")
+            if newImportance.strip() == "":
+                break
+            newImportance = int(newImportance)
+            if 0 < newImportance <= 5:
+                toDoToEdit["importance"] = newImportance
+                break
+            else:
+                print("Value must be between 1 and 5")
+        except ValueError:
+            print("Invalid input! Please enter an integer")
+
+    users = getUsers()
+    for user in users:
+        if user.user == logged:
+            user.setToDos(clientToDos)
+
+    with open("users.dat", "wb") as F:
+        pickle.dump(users, F)
+    F.close()
+    print("ToDo edited successfully!")
     
 # allows the user to access and operate various tasks management features.
 # allow the user to view ToDos, create new ToDos,editing ToDos and deleting ToDos.
 
 def console():
-
-    command = input("Inter a command: ")
+    x = f"{Style.BRIGHT + Fore.BLUE}Inter a command:{Style.RESET_ALL} "
+    command = input(x)
 
 
 
@@ -303,34 +360,41 @@ def console():
 
         while(command.lower() not in ["clear","help","exit","list","list--sort","delete","create","edit","logout","sort","delete--all"]):
             print("command not found enter (help) for help: ")
-            command = input("Inter a command: ")
+            command = input(x)
         if(command.lower() == 'help'):
-            command = input(helpMessage + "\nInter a command: ")
+            command = input(helpMessage + "\n" + x)
         if(command.lower() == "list"):
             printToDos()
-            command = input("\nInter a command: ")
+            command = input("\n" + x)
         if(command.lower() == "list--sort"):
             printToDos(sort=True)
-            command = input("\nInter a command: ")
+            command = input("\n" + x)
         if(command.lower() == "create"):
             createToDo()
-            command = input("\nInter a command: ")
+            command = input("\n" + x)
         if(command.lower() == "delete"):
             deliteToDo()
-            command = input("\nInter a command: ")
+            command = input("\n" + x)
         if(command.lower() == "delete--all"):
             deliteToDos()
-            command = input("\nInter a command: ")
+            command = input("\n" + x)
         if(command.lower() == "clear"):
             clear()
-            command = input("\nInter a command: ")
+            command = input("\n" + x)
         if(command.lower() == "logout"):
             confirm = input("Are you sure you want to Log-out of NeroTask? (Y/N): ") 
             while not (confirm.upper() in "YN"):
                 confirm = input("Are you sure you want to Log-out of NeroTask? (Y/N): ") 
             if(confirm.upper() == "Y"):
                 logOut()
-            command = input("\nInter a command: ")
+            command = input("\n"+ x)
+        if command.lower() == "edit":
+            editToDo()
+            command = input("\n"+x)
 
 
-loginOrSignUp()
+if __name__ == "__main__":
+    show_package_info()
+    loginOrSignUp()
+
+
